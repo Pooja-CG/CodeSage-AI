@@ -1,0 +1,228 @@
+/* =============================================
+   QueryIntentPanel.css
+   ============================================= */
+
+.qi-panel {
+  margin: 32px 0;
+  overflow: hidden;
+}
+
+/* Header */
+.qi-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--surface-border);
+  background: rgba(59, 130, 246, 0.06);
+}
+
+.qi-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.qi-brain-icon {
+  color: var(--accent-primary);
+}
+
+.qi-badge {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 20px;
+  letter-spacing: 1px;
+}
+
+.qi-header-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.qi-icon-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--surface-border);
+  color: var(--text-secondary);
+  border-radius: 6px;
+  padding: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.qi-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--text-primary);
+}
+
+.qi-copied {
+  color: var(--success);
+}
+
+/* Body */
+.qi-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Intent banner */
+.qi-intent-banner {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 10px;
+  padding: 16px 20px;
+}
+
+.qi-intent-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--accent-primary);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.qi-intent-text {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+/* Grid layout for 4 sections */
+.qi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 700px) {
+  .qi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Section */
+.qi-section {
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid var(--surface-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.qi-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid var(--surface-border);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--section-color, var(--text-secondary));
+  text-transform: uppercase;
+}
+
+.qi-section-body {
+  padding: 14px;
+}
+
+/* Pills */
+.qi-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.qi-pill {
+  background: color-mix(in srgb, var(--pill-color) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--pill-color) 40%, transparent);
+  color: var(--pill-color);
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+}
+
+.qi-pill:hover {
+  background: color-mix(in srgb, var(--pill-color) 25%, transparent);
+}
+
+/* File list */
+.qi-files {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.qi-file-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.qi-file-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.qi-file-row code {
+  font-family: 'Fira Code', 'Courier New', monospace;
+  font-size: 0.82rem;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* Search queries */
+.qi-search-queries {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+}
+
+.qi-query-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.qi-query-num {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.qi-query-text {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}

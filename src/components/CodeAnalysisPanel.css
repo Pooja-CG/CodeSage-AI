@@ -1,0 +1,186 @@
+/* =============================================
+   CodeAnalysisPanel.css
+   ============================================= */
+
+/* Toggle button — sits below the code snippet */
+.cap-wrapper {
+  margin-top: 16px;
+}
+
+.cap-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(139, 92, 246, 0.08);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  color: #a78bfa;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: all 0.2s ease;
+  letter-spacing: 0.3px;
+}
+
+.cap-toggle:hover {
+  background: rgba(139, 92, 246, 0.16);
+  border-color: rgba(139, 92, 246, 0.5);
+  color: #c4b5fd;
+}
+
+.cap-toggle-icon {
+  color: #8b5cf6;
+}
+
+.cap-spinner {
+  margin-left: auto;
+  animation: spin 1s linear infinite;
+}
+
+/* Panel body */
+.cap-panel {
+  margin-top: 10px;
+  background: rgba(10, 10, 20, 0.6);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 10px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Row: label + value */
+.cap-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cap-row-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.cap-row-icon {
+  flex-shrink: 0;
+}
+
+.cap-row-value {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cap-relevance {
+  background: rgba(139, 92, 246, 0.07);
+  border-left: 3px solid rgba(139, 92, 246, 0.5);
+  padding: 10px 14px;
+  border-radius: 0 6px 6px 0;
+  font-style: italic;
+}
+
+/* Key function chips */
+.cap-functions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cap-fn-chip {
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: #93c5fd;
+  font-family: 'Fira Code', 'Courier New', monospace;
+  font-size: 0.78rem;
+  padding: 3px 10px;
+  border-radius: 5px;
+  transition: background 0.2s ease;
+}
+
+.cap-fn-chip:hover {
+  background: rgba(59, 130, 246, 0.22);
+}
+
+/* Confidence bar */
+.cap-confidence {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cap-conf-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.cap-conf-score {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-left: 4px;
+}
+
+.cap-conf-label {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+.cap-conf-track {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.cap-conf-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Raw JSON */
+.cap-raw {
+  border-top: 1px solid var(--surface-border);
+  padding-top: 12px;
+}
+
+.cap-raw summary {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s;
+}
+
+.cap-raw summary:hover {
+  color: var(--text-primary);
+}
+
+.cap-json {
+  margin-top: 10px;
+  background: #0a0f1e;
+  border: 1px solid var(--surface-border);
+  border-radius: 8px;
+  padding: 14px;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.8rem;
+  color: #a0e4b8;
+  overflow-x: auto;
+  line-height: 1.6;
+  white-space: pre;
+}

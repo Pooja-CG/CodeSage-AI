@@ -1,0 +1,133 @@
+.results-container {
+  margin-top: 40px;
+}
+
+.results-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.results-icon {
+  color: var(--accent-secondary);
+}
+
+.results-header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.results-context {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  margin-bottom: 32px;
+}
+
+.results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.result-card {
+  padding: 24px;
+  border-left: 4px solid var(--accent-primary);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.result-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+.result-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: monospace;
+  font-size: 1.1rem;
+  background: rgba(15, 23, 42, 0.8);
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--surface-border);
+}
+
+.file-icon {
+  color: var(--accent-primary);
+}
+
+.view-source-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-primary);
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+.view-source-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.ai-explanation {
+  background: rgba(59, 130, 246, 0.1);
+  border-left: 3px solid var(--accent-secondary);
+  padding: 16px;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 24px;
+}
+
+.ai-explanation h4 {
+  color: var(--accent-secondary);
+  margin-bottom: 8px;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.ai-explanation p {
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.code-snippet-container {
+  background: #0f172a;
+  border-radius: 8px;
+  border: 1px solid var(--surface-border);
+  overflow: hidden;
+}
+
+.snippet-header {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--surface-border);
+  font-family: monospace;
+}
+
+.code-snippet {
+  margin: 0;
+  padding: 16px;
+  overflow-x: auto;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #e2e8f0;
+}
