@@ -61,11 +61,10 @@ export const fetchRepoTree = async (owner, repo) => {
 
 export const fetchFileContent = async (owner, repo, filePath, branch = 'main') => {
   const headers = getGitHubHeaders();
-  // Override the response type headers to fetch raw text data bytes directly instead of a Base64 JSON package object
+  // Fetch raw text data bytes directly instead of a Base64 JSON package object
   headers['Accept'] = 'application/vnd.github.v3.raw';
 
   try {
-    // Attempt fallback lookups for branch safety tracking
     const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}?ref=${branch}`, { headers });
     
     if (!res.ok && branch === 'main') {
