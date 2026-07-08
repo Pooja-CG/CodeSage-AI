@@ -31,12 +31,13 @@ export const parseGitHubUrl = (url) => {
 };
 
 export const fetchRepoTree = async (owner, repo) => {
+  const headers = getGitHubHeaders();
   let branch = 'main'; 
-  let response = await fetch(`https://api.github.com/repos/${owner}/${repo}/branches/${branch}`);
+  let response = await fetch(`https://api.github.com/repos/${owner}/${repo}/branches/${branch}`, { headers });
 
   if (response.status === 404) {
     branch = 'master';
-    response = await fetch(`https://api.github.com/repos/${owner}/${repo}/branches/${branch}`);
+    response = await fetch(`https://api.github.com/repos/${owner}/${repo}/branches/${branch}`, { headers });
   }
 
   if (!response.ok) {
@@ -46,7 +47,7 @@ export const fetchRepoTree = async (owner, repo) => {
   const branchData = await response.json();
   const treeSha = branchData.commit.commit.tree.sha;
 
-  const treeResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees/${treeSha}?recursive=1`);
+  const treeResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees/${treeSha}?recursive=1`, { headers });
   if (!treeResponse.ok) {
     throw new Error(`Failed to fetch repository tree. Status: ${treeResponse.status}`);
   }
@@ -58,12 +59,6 @@ export const fetchRepoTree = async (owner, repo) => {
   );
 };
 
-export const fetchFileContent = async (owner, repo, path) => {
-  const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`);
-  if (!response.ok) throw new Error(`Failed to fetch file content: ${path}`);
-  const data = await response.json();
-  return atob(data.content.replace(/\n/g, ''));
-};
 export const fetchFileContent = async (owner, repo, filePath, branch = 'main') => {
   const headers = getGitHubHeaders();
   // Override the response type headers to fetch raw text data bytes directly instead of a Base64 JSON package object
