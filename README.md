@@ -1,60 +1,67 @@
-# 🧙‍♂️ CodeSage AI
+# CodeSage AI
 
-CodeSage AI is an intelligent, multi-agent repository analyzer designed to help developers inspect, search, and understand large codebases effortlessly. By orchestrating generative AI frameworks with live GitHub workspace mapping, CodeSage AI acts as an interactive tutor and engineering copilot right inside your browser.
+CodeSage AI is an advanced, client-side multi-agent codebase analyzer engineered to streamline repository navigation, code comprehension, and architectural auditing. 
+By combining generative AI orchestration with direct workspace file tree mapping, CodeSage AI serves as an interactive technical tutor and context-aware development assistant directly within the browser ecosystem.
 
-🌐 **[Live Deployment Link](https://code-sage-qe9xyev2p-codsage.vercel.app/)**
-
----
-
-## ✨ Features
-
-* **⚡ Live Repository Ingestion:** Input any public GitHub repository URL to dynamically fetch and map its entire tree structure.
-* **🤖 Multi-Agent Orchestration:** Utilizes advanced parsing frameworks to split complex engineering questions into focused agent operations.
-* **🎨 Intelligent Code Highlighting:** Displays file contents alongside an interactive panel utilizing context-aware code block highlighting for clear codebase readability.
-* **🏎️ Token-Optimized Delivery:** Built with highly optimized raw text-byte data request protocols (`application/vnd.github.v3.raw`) to dramatically reduce API payload bottlenecks and eliminate base64 encoding limits.
+🚀 **[Explore the Live Deployment](https://code-sage-qe9xyev2p-codsage.vercel.app/)**
 
 ---
 
-## 🛠️ Tech Stack
+## ⚡ Core Engineering Features
 
-* **Frontend Ecosystem:** React, Vite, Tailwind CSS
-* **Generative AI Models:** Gemini API Orchestration
-* **Version Control & Mapping:** GitHub REST API integration
+* **Real-Time Remote Ingestion:** Dynamic resolution of public GitHub repository URLs to generate absolute virtual maps of project structures natively on the client.
+* **Multi-Agent Intent Disambiguation:** Hierarchical processing pipelines that decompose complex codebase inquiries into isolated sub-agent lookups.
+* **Token-Optimized Streamlining:** Implements a direct byte-stream extraction protocol via `application/vnd.github.v3.raw` to mitigate large-file parsing thresholds, escape Base64 encoding limits, and manage LLM token overhead efficiently.
+* **Contextual UI Workspace:** Dual-panel architecture rendering isolated code views with custom tokenized syntax highlighting adjacent to a responsive AI dialogue terminal.
 
 ---
 
-## 🚀 Getting Started Locally
+## 🏗️ System Architecture & Data Pipeline
 
-Follow these steps to spin up the project in a local environment:
+CodeSage AI operates completely serverless, optimizing memory footprints and performance overhead by conducting ingestion stages directly on the user's thread:
 
-### 1. Clone the Repository
-```bash
-git clone [https://github.com/Pooja-CG/CodeSage-AI.git](https://github.com/Pooja-CG/CodeSage-AI.git)
-cd CodeSage-AI
+1. **Parameter Extraction:** Validates entry URLs via targeted Regular Expressions to split explicit workspace identifiers (`{owner}`, `{repo}`).
+2. **Recursive Structural Mapping:** Evaluates target file trees via recursive endpoints, filtering asset formats (binaries, compression archives, system fonts) to establish a clean structural layout.
+3. **Optimized Content Delivery:** Bypasses conventional nested JSON packages by utilizing raw character byte transfer, preventing memory execution spikes and character distortion during extraction.
+4. **Targeted Ingestion (Map-Reduce):** Rather than dispatching absolute source files to the generative model, the orchestrator cross-references the lightweight tree map, fetching code snippets matching the precise structural intent of the prompt.
 
+---
 
-### 2. Install Dependencies
+## 🛠️ Technology Stack
+
+* **Frontend Architecture:** React (Functional State Patterns, Hook Compositions), Vite
+* **Styling Framework:** Tailwind CSS (Utility-First Responsive Composability)
+* **AI Orchestration Framework:** Gemini API Engine
+* **Version Control Interface:** GitHub REST API v3
+
+---
+
+## 🚀 Local Installation & Deployment
+
+Follow these parameters to configure and spin up a localized copy of the environment:
+
+### Prerequisites
+* Node.js (v18.x or higher recommended)
+* npm or yarn package manager
+
+2. Dependency Resolution
 Bash
 npm install
-3. Setup Environment Variables
-Create a .env file in the root directory and insert your application tokens safely:
+3. Environment Configurations
+Construct a secure .env file within the base execution directory and populate the required integration keys:
 
 Code snippet
 VITE_GEMINI_API_KEY=your_gemini_api_key_here
 VITE_GITHUB_TOKEN=your_github_personal_access_token_here
-4. Boot Up the Development Server
+4. Initialize Local Server
 Bash
 npm run dev
+📈 Engineering Roadmap
+[ ] Web File System Access API Integration: Enable drag-and-drop ingestion of local offline workspaces directly into the application instance without remote repository dependencies.
+
+[ ] Visual Component Dependency Graphs: Render interactive topology diagrams using Reactflow to visualize import linkages and context inheritance paths between components.
+
+[ ] Semantic Code Embeddings: Implement browser-based vector database integration (e.g., Orama) to handle native semantic querying over source blocks.
+
 🛡️ License
-Distributed under the MIT License. See LICENSE for more information.
-
-
----
-
-### 🚀 To push this to your repository:
-Save the code inside your local `README.md` file in VS Code, then update your repo:
-
-```bash
-git add README.md
-git commit -m "docs: add comprehensive project README with live deployment url"
-git push origin main
+This project is licensed under the terms of the MIT License. See the LICENSE file for extensive details.
