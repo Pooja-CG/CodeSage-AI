@@ -4,68 +4,18 @@ import SearchInterface from './components/SearchInterface';
 import AgentStatus from './components/AgentStatus';
 import ResultsDisplay from './components/ResultsDisplay';
 import QueryIntentPanel from './components/QueryIntentPanel';
-import { parseQuery } from './utils/queryParser';
 
-const MOCK_STEPS = [
-  "Fetching repository metadata...",
-  "Parsing Abstract Syntax Trees (AST)...",
-  "Generating semantic embeddings...",
-  "Matching natural language query to code...",
-  "Extracting relevant snippets and synthesizing explanation...",
+// Real service infrastructure layers
+import { parseQueryIntent, analyzeCodeFile } from './utils/geminiService';
+import { parseGitHubUrl, fetchRepoTree, fetchFileContent } from './utils/githubService';
+
+const REAL_STEPS = [
+  "Analyzing natural language query and extracting developer intent...",
+  "Connecting to GitHub and downloading codebase tree structure...",
+  "Scanning files for semantic matches matching intent...",
+  "Running deep file analysis using Gemini Agent engine...",
+  "Synthesizing dynamic context and compiling code investigation report..."
 ];
-
-function buildMockResults(query, intent) {
-  const filename = intent?.possible_filenames?.[0] ?? "index.js";
-  const concept = intent?.code_concepts?.[0] ?? "core logic";
-  const keyword = intent?.keywords?.[0] ?? "handler";
-
-  return [
-    {
-      path: `src/core/${filename}`,
-      url: `https://github.com/facebook/react/blob/main/src/core/${filename}`,
-      explanation: `This file encapsulates the primary ${concept} logic. It directly matches your query "${query}" by exposing the main entry point for the ${keyword} subsystem, where the core processing pipeline is initialized and managed.`,
-      lineStart: 42,
-      lineEnd: 68,
-      snippet: `// ${filename} — auto-located by CodeSage AI
-// Concept: ${concept}
-
-export function initialize${keyword.charAt(0).toUpperCase() + keyword.slice(1)}(config) {
-  const ctx = createContext(config);
-  ctx.on('ready', () => {
-    process(ctx);
-  });
-  return ctx;
-}
-
-export function process(ctx) {
-  validate(ctx.config);
-  const result = execute(ctx);
-  return result;
-}`,
-    },
-    {
-      path: `src/utils/${intent?.possible_filenames?.[1] ?? "helpers.js"}`,
-      url: `https://github.com/facebook/react/blob/main/src/utils/helpers.js`,
-      explanation: `This utility module provides supporting functions for the ${concept} flow. It handles edge cases, input validation, and error boundaries that complement the primary implementation found above.`,
-      lineStart: 110,
-      lineEnd: 134,
-      snippet: `// Utility helpers for: ${query}
-
-export function validate(input) {
-  if (!input || typeof input !== 'object') {
-    throw new TypeError('Invalid input: expected configuration object');
-  }
-  const required = ${JSON.stringify(intent?.keywords?.slice(0, 3) ?? [])};
-  required.forEach(key => {
-    if (!(key.toLowerCase() in input)) {
-      throw new Error(\`Missing required field: \${key}\`);
-    }
-  });
-  return true;
-}`,
-    },
-  ];
-}
 
 function App() {
   const [isSearching, setIsSearching] = useState(false);
@@ -74,32 +24,114 @@ function App() {
   const [results, setResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [parsedIntent, setParsedIntent] = useState(null);
+  const [errorMsg, setErrorMsg] = useState('');
 
-  const handleSearch = (repoUrl, query) => {
-    // Parse the query immediately for instant feedback
-    const intent = parseQuery(query);
-    setParsedIntent(null);   // hide old intent while searching
+  const handleSearch = async (repoUrl, query) => {
+    if (!repoUrl || !query) return;
+
+    // Reset layout state for a clean pipeline run
     setIsSearching(true);
-    setStatusSteps(MOCK_STEPS);
-    setCurrentStep(0);
+    setErrorMsg('');
+    setParsedIntent(null);
     setResults([]);
     setSearchQuery(query);
+    setStatusSteps(REAL_STEPS);
+    
+    try {
+      // --- STEP 1: PARSE INTENT ---
+      setCurrentStep(0);
+      const intentResult = await parseQueryIntent(query);
 
-    let step = 0;
-    const interval = setInterval(() => {
-      step += 1;
-      setCurrentStep(step);
+      // Safely map the service layer payload into your custom UI component props
+      const UI_Intent = {
+        intent: intentResult?.intent || `Investigating: ${query}`,
+        keywords: intentResult?.keywords || [],
+        possible_filenames: intentResult?.probableFiles || [],
+        code_concepts: intentResult?.concepts || [],
+        search_queries: intentResult?.searchQueries || [query]
+      };
+      setParsedIntent(UI_Intent);
 
-      if (step >= MOCK_STEPS.length) {
-        clearInterval(interval);
-        setTimeout(() => {
-          setIsSearching(false);
-          setStatusSteps([]);
-          setParsedIntent(intent);
-          setResults(buildMockResults(query, intent));
-        }, 800);
+      // --- STEP 2: PARSE REPO & FETCH FILE TREE ---
+      setCurrentStep(1);
+      const repoDetails = parseGitHubUrl(repoUrl);
+      if (!repoDetails) {
+        throw new Error("Invalid GitHub repository URL format.");
       }
-    }, 1400);
+      const { owner, repo } = repoDetails;
+      const fileTree = await fetchRepoTree(owner, repo);
+
+      // --- STEP 3: SCANNING THE FILES FOR MATCHES ---
+      setCurrentStep(2);
+      
+      // Defensively fallback to empty arrays if specific fields are missing
+      const languages = intentResult?.languages || [];
+      const probableFiles = intentResult?.probableFiles || [];
+      const extensionTargets = languages.map(ext => `.${ext.replace('.', '')}`);
+      
+      const prioritizedFiles = fileTree.filter(file => {
+        const filePathLower = file.path.toLowerCase();
+        
+        const matchesExtension = extensionTargets.length === 0 || 
+          extensionTargets.some(ext => file.path.endsWith(ext));
+          
+        const matchesKeyword = probableFiles.some(keyword => 
+          filePathLower.includes(keyword.toLowerCase().replace(/^\*+|\*+$/g, ''))
+        ) || UI_Intent.keywords.some(keyword => 
+          filePathLower.includes(keyword.toLowerCase())
+        );
+        
+        return matchesExtension || matchesKeyword;
+      }).slice(0, 6); // Limit evaluations to save token limits and optimize search speed
+
+      // Fallback directly to inspecting top root files if keyword filters return empty
+      const executionQueue = prioritizedFiles.length > 0 ? prioritizedFiles : fileTree.slice(0, 4);
+
+      // --- STEP 4 & 5: RUN DEEP FILE ANALYSIS AND REASONING ---
+      setCurrentStep(3);
+      const investigatedResults = [];
+
+      for (const file of executionQueue) {
+        try {
+          const rawContent = await fetchFileContent(owner, repo, file.path);
+          
+          // Let Gemini inspect the code contents against your workflow target
+          const analysis = await analyzeCodeFile(file.path, rawContent, query);
+          
+          if (analysis && analysis.isRelevant) {
+            const lines = rawContent.split('\n');
+            investigatedResults.push({
+              path: file.path,
+              url: `https://github.com/${owner}/${repo}/blob/main/${file.path}`,
+              explanation: analysis.reasoning,
+              relevanceScore: analysis.relevanceScore || 70, 
+              snippet: lines.slice(0, 40).join('\n'), // Grab safety view snippet frame
+              lineStart: 1,
+              lineEnd: Math.min(40, lines.length)
+            });
+          }
+        } catch (fileErr) {
+          console.warn(`Skipping analysis for file node context: ${file.path}`, fileErr);
+        }
+      }
+
+      // Sort matches dynamically by highest relevance score
+      investigatedResults.sort((a, b) => b.relevanceScore - a.relevanceScore);
+
+      setCurrentStep(4);
+      // Give UI loading states a quick moment to settle cleanly on complete
+      setTimeout(() => {
+        setResults(investigatedResults);
+        setIsSearching(false);
+        setStatusSteps([]);
+      }, 600);
+
+    } catch (err) {
+      console.error("Investigation processing error:", err);
+      setErrorMsg(err.message || "An unexpected error occurred during the codebase compilation.");
+      setIsSearching(false);
+      setStatusSteps([]);
+    }
   };
 
   return (
@@ -108,7 +140,13 @@ function App() {
       <main className="app-container">
         <SearchInterface onSearch={handleSearch} isSearching={isSearching} />
 
-        {statusSteps.length > 0 && (
+        {errorMsg && (
+          <div className="error-banner" style={{ color: '#f85149', margin: '20px 0', textAlign: 'center' }}>
+            <strong>Investigation Error:</strong> {errorMsg}
+          </div>
+        )}
+
+        {isSearching && statusSteps.length > 0 && (
           <AgentStatus statusSteps={statusSteps} currentStep={currentStep} />
         )}
 

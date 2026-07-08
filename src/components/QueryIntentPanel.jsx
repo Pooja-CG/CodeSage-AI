@@ -54,14 +54,14 @@ export default function QueryIntentPanel({ intent }) {
           {/* Intent */}
           <div className="qi-intent-banner">
             <span className="qi-intent-label">INTENT</span>
-            <p className="qi-intent-text">{intent.intent}</p>
+            <p className="qi-intent-text">{intent.intent || "No intent description provided."}</p>
           </div>
 
           <div className="qi-grid">
             {/* Keywords */}
             <Section icon={Tag} title="Keywords" color="#3b82f6">
               <div className="qi-pills">
-                {intent.keywords.map((k, i) => (
+                {(intent.keywords || []).map((k, i) => (
                   <Pill key={i} label={k} color="#3b82f6" />
                 ))}
               </div>
@@ -70,7 +70,7 @@ export default function QueryIntentPanel({ intent }) {
             {/* Possible Filenames */}
             <Section icon={FileCode2} title="Possible Filenames" color="#10b981">
               <div className="qi-files">
-                {intent.possible_filenames.map((f, i) => (
+                {(intent.possible_filenames || []).map((f, i) => (
                   <div key={i} className="qi-file-row">
                     <span className="qi-file-dot" style={{ background: '#10b981' }} />
                     <code>{f}</code>
@@ -82,7 +82,7 @@ export default function QueryIntentPanel({ intent }) {
             {/* Code Concepts */}
             <Section icon={Layers} title="Code Concepts" color="#8b5cf6">
               <div className="qi-pills">
-                {intent.code_concepts.map((c, i) => (
+                {(intent.code_concepts || []).map((c, i) => (
                   <Pill key={i} label={c} color="#8b5cf6" />
                 ))}
               </div>
@@ -91,7 +91,7 @@ export default function QueryIntentPanel({ intent }) {
             {/* Search Queries */}
             <Section icon={Search} title="Search Queries" color="#f59e0b">
               <ol className="qi-search-queries">
-                {intent.search_queries.map((q, i) => (
+                {(intent.search_queries || []).map((q, i) => (
                   <li key={i} className="qi-query-item">
                     <span className="qi-query-num">{i + 1}</span>
                     <span className="qi-query-text">"{q}"</span>
